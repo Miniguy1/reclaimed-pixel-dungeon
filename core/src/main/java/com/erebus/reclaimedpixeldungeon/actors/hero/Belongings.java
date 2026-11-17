@@ -94,8 +94,11 @@ public class Belongings implements Iterable<Item> {
 		{
 			image = ItemSpriteSheet.BACKPACK;
 		}
+		//two more rows than the original 20 slots (the backpack screen is five slots wide)
+		public static final int BONUS_SLOTS = 10;
+
 		public int capacity(){
-			int cap = super.capacity();
+			int cap = super.capacity() + BONUS_SLOTS;
 			for (Item item : items){
 				if (item instanceof Bag){
 					cap++;
