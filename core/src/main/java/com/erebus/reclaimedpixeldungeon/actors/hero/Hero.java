@@ -2555,16 +2555,18 @@ public class Hero extends Char {
 		}
 
 		HeroClass currentClass = heroClass;
-		lvl = 1;
-		exp = 0;
-		HTBoost = 0;
-		//a normal return keeps Strength (gear found for it would be useless otherwise); death takes it back
-		if (wipeBelongings) STR = STARTING_STR;
-		subClass = HeroSubClass.NONE;
-		armorAbility = null;
-		talents.clear();
-		heroClass = currentClass;
-		Talent.initClassTalents( this );
+		//Strength is never taken away, not even by death.
+		//A normal return keeps the level, the talents, the subclass and the armor ability; death takes all of them back.
+		if (wipeBelongings) {
+			lvl = 1;
+			exp = 0;
+			HTBoost = 0;
+			subClass = HeroSubClass.NONE;
+			armorAbility = null;
+			talents.clear();
+			heroClass = currentClass;
+			Talent.initClassTalents( this );
+		}
 
 		if (wipeBelongings) {
 			Dungeon.resetMobLevelPressure();
@@ -2599,7 +2601,7 @@ public class Hero extends Char {
 		live();
 		GLog.w( wipeBelongings
 				? "The dungeon devours your memories and gear."
-				: "The dungeon squeezes away your memories and experience." );
+				: "You return to the homebase, keeping your level and Strength." );
 	}
 	
 	public static void reallyDie( Object cause ) {
