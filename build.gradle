@@ -11,8 +11,8 @@ buildscript {
 allprojects {
 
     ext {
-        appName = 'Reclaimed Pixel Dungeon'
-        appPackageName = 'com.erebus.reclaimedpixeldungeon'
+        appName = 'My Reclaimed PD'
+        appPackageName = 'com.chethan.reclaimedpd'
 
 		appVersionCode = 10024
 		appVersionName = '0.2.4'

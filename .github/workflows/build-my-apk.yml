@@ -1,0 +1,74 @@
+name: Build my APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Accept Android SDK licenses
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+
+      - name: Use the permanent signing key (so every build installs over the last one)
+        run: |
+          mkdir -p ~/.android
+          cp ci/personal-debug-key.bin ~/.android/debug.keystore
+
+      - name: Put the build number in the version, and bump the version code every build
+        run: |
+          FP=$(keytool -list -v -keystore ~/.android/debug.keystore -storepass android 2>/dev/null | grep -m1 'SHA256:' | awk '{print $2}' | tr -d ':' | cut -c1-8)
+          echo "key fingerprint starts $FP"
+          sed -i "s/versionNameSuffix '-INDEV'/versionNameSuffix '-INDEV-b${{ github.run_number }}-k${FP}'/" android/build.gradle
+          sed -i "s/appVersionCode = [0-9]*/appVersionCode = $((20000 + ${{ github.run_number }}))/" build.gradle
+          grep -n "versionNameSuffix" android/build.gradle
+          grep -n "appVersionCode" build.gradle
+
+      - name: Stop the app checking the original author's releases for updates
+        run: sed -i "s#debugImplementation project(':services:updates:githubUpdates')#debugImplementation project(':services:updates:debugUpdates')#" android/build.gradle
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build the APK
+        run: |
+          set -o pipefail
+          chmod +x gradlew
+          ./gradlew :android:assembleDebug --stacktrace 2>&1 | tee -a build.log
+
+      - name: Refuse to publish a build signed with the wrong key
+        run: |
+          APK=$(ls android/build/outputs/apk/debug/*.apk | head -1)
+          GOT=$(keytool -printcert -jarfile "$APK" | grep -m1 'SHA256:' | awk '{print $2}')
+          WANT=$(cat ci/expected-key-fingerprint.txt | tr -d '[:space:]')
+          echo "APK key : $GOT"
+          echo "expected: $WANT"
+          test "$GOT" = "$WANT"
+
+      - name: Save the build errors to the repo so they can be read
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          grep -E "FAILED$" build.log | sort -u | head -80 > errors.txt || true
+          echo "-----" >> errors.txt
+          grep -nE -B2 -A8 "error:|What went wrong" build.log | head -90 >> errors.txt || true
+          tail -40 build.log >> errors.txt
+          gh api --method PUT "repos/${{ github.repository }}/contents/build-logs/errors-${{ github.run_number }}.txt" \
+            -f message="build errors for run ${{ github.run_number }}" -f content="$(base64 -w0 errors.txt)" -f branch=master
+
+      - name: Publish the APK as a release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "build-${{ github.run_number }}" android/build/outputs/apk/debug/*.apk \
+            --repo "${{ github.repository }}" --title "My build ${{ github.run_number }}" --notes "My own balanced Reclaimed PD build"

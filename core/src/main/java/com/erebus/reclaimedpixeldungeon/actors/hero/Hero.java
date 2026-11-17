@@ -2554,7 +2554,7 @@ public class Hero extends Char {
 		lvl = 1;
 		exp = 0;
 		HTBoost = 0;
-		STR = STARTING_STR;
+		//Strength is kept between expeditions: gear found and upgraded for it would be useless otherwise
 		subClass = HeroSubClass.NONE;
 		armorAbility = null;
 		talents.clear();
