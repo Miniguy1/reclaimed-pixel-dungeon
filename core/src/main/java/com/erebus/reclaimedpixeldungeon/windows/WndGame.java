@@ -100,6 +100,15 @@ public class WndGame extends Window {
 			curBtn.icon(Icons.get(Icons.RANKINGS));
 		}
 
+		// my own mod menu
+		addButton( curBtn = new RedButton( "Mod menu" ) {
+			@Override
+			protected void onClick() {
+				hide();
+				GameScene.show( new WndModMenu() );
+			}
+		});
+
 		// Main menu
 		addButton(curBtn = new RedButton(Messages.get(this, "menu")) {
 			@Override
