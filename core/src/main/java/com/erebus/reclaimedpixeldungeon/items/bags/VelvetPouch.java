@@ -39,7 +39,11 @@ public class VelvetPouch extends Bag {
 
 	@Override
 	public boolean canHold( Item item ) {
-		if (item instanceof Plant.Seed || item instanceof Runestone
+		//catalyst stones belong in the Material Satchel; until the hero has one (it is bought in a shop), the pouch holds them
+		boolean catalystWithNoSatchel = item instanceof com.erebus.reclaimedpixeldungeon.items.stones.CatalystStone
+				&& !(com.erebus.reclaimedpixeldungeon.Dungeon.hero != null
+				&& com.erebus.reclaimedpixeldungeon.Dungeon.hero.belongings.getItem( com.erebus.reclaimedpixeldungeon.items.bags.MaterialSatchel.class ) != null);
+		if (item instanceof Plant.Seed || item instanceof Runestone || catalystWithNoSatchel
 				|| item instanceof GooBlob || item instanceof MetalShard){
 			return super.canHold(item);
 		} else {
