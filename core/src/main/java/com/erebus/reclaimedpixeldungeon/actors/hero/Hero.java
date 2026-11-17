@@ -2532,10 +2532,14 @@ public class Hero extends Char {
 		}
 
 		ArrayList<Item> soulboundReturns = new ArrayList<>();
+		ArrayList<Item> ringReturns = new ArrayList<>();   //death takes everything except rings
 		if (wipeBelongings) {
 			for (Item item : belongings) {
 				if (item != null && item.hasRarityStat( RarityStat.Type.SOULBOUND )) {
 					soulboundReturns.add( item );
+				}
+				if (item instanceof com.erebus.reclaimedpixeldungeon.items.rings.Ring && !ringReturns.contains( item )) {
+					ringReturns.add( item );
 				}
 			}
 			for (Item item : soulboundReturns) {
@@ -2554,7 +2558,8 @@ public class Hero extends Char {
 		lvl = 1;
 		exp = 0;
 		HTBoost = 0;
-		//Strength is kept between expeditions: gear found and upgraded for it would be useless otherwise
+		//a normal return keeps Strength (gear found for it would be useless otherwise); death takes it back
+		if (wipeBelongings) STR = STARTING_STR;
 		subClass = HeroSubClass.NONE;
 		armorAbility = null;
 		talents.clear();
@@ -2574,6 +2579,16 @@ public class Hero extends Char {
 			}
 			if (!soulboundReturns.isEmpty()) {
 				Sample.INSTANCE.play( Assets.Sounds.CHARGEUP );
+			}
+			int ringsKept = 0;
+			for (Item item : ringReturns) {
+				if (soulboundReturns.contains( item )) continue;
+				item.keptThoughLostInvent = false;
+				item.collect( belongings.backpack );
+				ringsKept++;
+			}
+			if (ringsKept > 0) {
+				GLog.p( ringsKept == 1 ? "Your ring survived." : "Your rings survived." );
 			}
 		} else {
 			belongings.lostInventory( false );
