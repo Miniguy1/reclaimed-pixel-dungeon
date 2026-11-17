@@ -47,12 +47,18 @@ jobs:
 
       - name: Refuse to publish a build signed with the wrong key
         run: |
-          APK=$(ls android/build/outputs/apk/debug/*.apk | head -1)
-          GOT=$(keytool -printcert -jarfile "$APK" | grep -m1 'SHA256:' | awk '{print $2}')
-          WANT=$(cat ci/expected-key-fingerprint.txt | tr -d '[:space:]')
-          echo "APK key : $GOT"
-          echo "expected: $WANT"
-          test "$GOT" = "$WANT"
+          {
+            echo "== APK files:"; find android/build/outputs -name '*.apk' | head
+            APK=$(find android/build/outputs/apk/debug -name '*.apk' | head -1)
+            echo "APK: $APK"
+            echo "== keystore in use:"; ls -la ~/.android/ ; echo "ANDROID_USER_HOME=$ANDROID_USER_HOME"
+            echo "== signer of the APK:"; keytool -printcert -jarfile "$APK" | head -12
+            GOT=$(keytool -printcert -jarfile "$APK" | grep -m1 'SHA256:' | awk '{print $2}' | tr -d '[:space:]' | tr 'a-f' 'A-F')
+            WANT=$(cat ci/expected-key-fingerprint.txt | tr -d '[:space:]' | tr 'a-f' 'A-F')
+            echo "APK key : $GOT"
+            echo "expected: $WANT"
+            test -n "$GOT" && test "$GOT" = "$WANT"
+          } 2>&1 | tee -a build.log
 
       - name: Save the build errors to the repo so they can be read
         if: failure()
@@ -62,7 +68,7 @@ jobs:
           grep -E "FAILED$" build.log | sort -u | head -80 > errors.txt || true
           echo "-----" >> errors.txt
           grep -nE -B2 -A8 "error:|What went wrong" build.log | head -90 >> errors.txt || true
-          tail -40 build.log >> errors.txt
+          tail -60 build.log >> errors.txt
           gh api --method PUT "repos/${{ github.repository }}/contents/build-logs/errors-${{ github.run_number }}.txt" \
             -f message="build errors for run ${{ github.run_number }}" -f content="$(base64 -w0 errors.txt)" -f branch=master
 
