@@ -494,14 +494,18 @@ public class Toolbar extends Component {
 		int quickslotsToShow = 4;
 		if (PixelScene.uiCamera.width > 152) quickslotsToShow ++;
 		if (PixelScene.uiCamera.width > 170) quickslotsToShow ++;
+		if (PixelScene.uiCamera.width > 188) quickslotsToShow ++;
+		if (PixelScene.uiCamera.width > 206) quickslotsToShow ++;
+		if (PixelScene.uiCamera.width > 224) quickslotsToShow ++;
+		quickslotsToShow = Math.min( quickslotsToShow, QuickSlot.SIZE );
 
 		int startingSlot;
 		if (SPDSettings.quickSwapper() && quickslotsToShow < 6){
 			quickslotsToShow = 3;
-			startingSlot = swappedQuickslots ? 3 : 0;
+			startingSlot = quickBank * 3;
 			btnSwap.visible = true;
 			btnSwap.active = lastEnabled;
-			QuickSlotButton.lastVisible = 6;
+			QuickSlotButton.lastVisible = QuickSlot.SIZE;
 		} else {
 			startingSlot = 0;
 			btnSwap.visible = btnSwap.active = false;
@@ -816,7 +820,8 @@ public class Toolbar extends Component {
 		}
 	}
 
-	public static boolean swappedQuickslots = false;
+	public static int quickBank = 0;   //which bank of three quickslots is showing
+	public static int quickBanks(){ return Math.max( 1, QuickSlot.SIZE / 3 ); }
 	public static SlotSwapTool SWAP_INSTANCE;
 
 	public static class SlotSwapTool extends Tool {
@@ -839,7 +844,7 @@ public class Toolbar extends Component {
 		@Override
 		protected void onClick() {
 			super.onClick();
-			swappedQuickslots = !swappedQuickslots;
+			quickBank = (quickBank + 1) % quickBanks();
 			updateLayout();
 			updateVisuals();
 		}
@@ -853,11 +858,12 @@ public class Toolbar extends Component {
 
 			int slot;
 			int slotDir;
+			int other = (quickBank + 1) % quickBanks();
 			if (SPDSettings.flipToolbar()){
-				slot = swappedQuickslots ? 0 : 3;
+				slot = other * 3;
 				slotDir = +1;
 			} else {
-				slot = swappedQuickslots ? 2 : 5;
+				slot = other * 3 + 2;
 				slotDir = -1;
 			}
 

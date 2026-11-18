@@ -32,7 +32,7 @@ public class ItemSpriteSheet {
 	public static final int SIZE = 16;
 
 	private static final int TX_WIDTH = 256;
-	private static final int TX_HEIGHT = 512;
+	private static final int TX_HEIGHT = 528;
 
 	private static final int WIDTH = TX_WIDTH / SIZE;
 
@@ -1060,4 +1060,12 @@ public class ItemSpriteSheet {
 
 	}
 
+
+	private static final int OW_SKILLS      =                            xy(1, 33);   //16 slots: my skill buttons (drawn by script)
+	public static final int SKILL_DASH          = OW_SKILLS+0;
+	public static final int SKILL_LIFETAKER     = OW_SKILLS+1;
+	static {
+		assignItemRect( SKILL_DASH, 16, 13 );
+		assignItemRect( SKILL_LIFETAKER, 13, 16 );
+	}
 }

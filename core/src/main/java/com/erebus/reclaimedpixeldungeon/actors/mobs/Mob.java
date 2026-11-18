@@ -1062,6 +1062,9 @@ public abstract class Mob extends Char {
 				if (Dungeon.hero.subClass == HeroSubClass.MONK){
 					Buff.affect(Dungeon.hero, MonkEnergy.class).gainEnergy(this);
 				}
+				if (cause == Dungeon.hero) {
+					com.erebus.reclaimedpixeldungeon.items.skills.LifetakerSkill.onKill( Dungeon.hero );   //my warrior skill
+				}
 			}
 		}
 	}
