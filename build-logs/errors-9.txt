@@ -1,0 +1,145 @@
+> Task :core:compileJava FAILED
+-----
+21-
+22-> Task :core:compileJava
+23:/home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/actors/mobs/Mob.java:1065: error: cannot find symbol
+24-				if (cause == Dungeon.hero) {
+25-				    ^
+26-  symbol:   variable cause
+27-  location: class Mob
+28:/home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/Dungeon.java:286: error: cannot find symbol
+29-		Toolbar.swappedQuickslots = false;
+30-		       ^
+31-  symbol:   variable swappedQuickslots
+32-  location: class Toolbar
+33:/home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/Dungeon.java:1033: error: cannot find symbol
+34-		Toolbar.swappedQuickslots = false;
+35-		       ^
+36-  symbol:   variable swappedQuickslots
+37-  location: class Toolbar
+38:/home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/Rankings.java:352: error: cannot find symbol
+39-		Toolbar.swappedQuickslots = false;
+40-		       ^
+41-  symbol:   variable swappedQuickslots
+42-  location: class Toolbar
+43-Note: Some input files use unchecked or unsafe operations.
+44-Note: Recompile with -Xlint:unchecked for details.
+45-4 errors
+46-
+--
+52-FAILURE: Build failed with an exception.
+53-
+54:* What went wrong:
+55-Execution failed for task ':core:compileJava'.
+56-> Compilation failed; see the compiler output below.
+57:  /home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/actors/mobs/Mob.java:1065: error: cannot find symbol
+58-  				if (cause == Dungeon.hero) {
+59-  				    ^
+60-    symbol:   variable cause
+61-    location: class Mob
+62:  /home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/Dungeon.java:286: error: cannot find symbol
+63-  		Toolbar.swappedQuickslots = false;
+64-  		       ^
+65-    symbol:   variable swappedQuickslots
+66-    location: class Toolbar
+67:  /home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/Dungeon.java:1033: error: cannot find symbol
+68-  		Toolbar.swappedQuickslots = false;
+69-  		       ^
+70-    symbol:   variable swappedQuickslots
+71-    location: class Toolbar
+72:  /home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/Rankings.java:352: error: cannot find symbol
+73-  		Toolbar.swappedQuickslots = false;
+74-  		       ^
+75-    symbol:   variable swappedQuickslots
+76-    location: class Toolbar
+77-  Note: Recompile with -Xlint:unchecked for details.
+78-  Note: Some input files use unchecked or unsafe operations.
+79-  4 errors
+80-
+--
+150-	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:47)
+151-Caused by: org.gradle.api.internal.tasks.compile.CompilationFailedException: Compilation failed; see the compiler output below.
+152:/home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/actors/mobs/Mob.java:1065: error: cannot find symbol
+153-				if (cause == Dungeon.hero) {
+154-				    ^
+155-  symbol:   variable cause
+156-  location: class Mob
+157:/home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/Dungeon.java:286: error: cannot find symbol
+158-		Toolbar.swappedQuickslots = false;
+159-		       ^
+160-  symbol:   variable swappedQuickslots
+161-  location: class Toolbar
+162:/home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/Dungeon.java:1033: error: cannot find symbol
+163-		Toolbar.swappedQuickslots = false;
+164-		       ^
+165-  symbol:   variable swappedQuickslots
+166-  location: class Toolbar
+167:/home/runner/work/reclaimed-pixel-dungeon/reclaimed-pixel-dungeon/core/src/main/java/com/erebus/reclaimedpixeldungeon/Rankings.java:352: error: cannot find symbol
+168-		Toolbar.swappedQuickslots = false;
+169-		       ^
+170-  symbol:   variable swappedQuickslots
+171-  location: class Toolbar
+172-Note: Some input files use unchecked or unsafe operations.
+173-Note: Recompile with -Xlint:unchecked for details.
+174-4 errors
+175-	at org.gradle.api.internal.tasks.compile.JdkJavaCompiler.execute(JdkJavaCompiler.java:89)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.executeMutable(StoreExecutionStateStep.java:35)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:75)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:35)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+	at org.gradle.internal.execution.steps.ResolveMutableCachingStateStep.executeDelegate(ResolveMutableCachingStateStep.java:70)
+	at org.gradle.internal.execution.steps.ResolveMutableCachingStateStep.executeDelegate(ResolveMutableCachingStateStep.java:32)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:69)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:37)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.executeMutable(ResolveChangesStep.java:63)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.executeMutable(ResolveChangesStep.java:34)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.ValidateStep$Mutable.executeDelegate(ValidateStep.java:79)
+	at org.gradle.internal.execution.steps.ValidateStep$Mutable.executeDelegate(ValidateStep.java:65)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:99)
+	at org.gradle.internal.execution.steps.ValidateStep$Mutable.execute(ValidateStep.java:65)
+	at org.gradle.internal.execution.steps.CaptureMutableStateBeforeExecutionStep.executeMutable(CaptureMutableStateBeforeExecutionStep.java:86)
+	at org.gradle.internal.execution.steps.CaptureMutableStateBeforeExecutionStep.execute(CaptureMutableStateBeforeExecutionStep.java:65)
+	at org.gradle.internal.execution.steps.CaptureMutableStateBeforeExecutionStep.execute(CaptureMutableStateBeforeExecutionStep.java:45)
+	at org.gradle.internal.execution.steps.SkipEmptyMutableWorkStep.executeWithNonEmptySources(SkipEmptyMutableWorkStep.java:210)
+	at org.gradle.internal.execution.steps.SkipEmptyMutableWorkStep.executeMutable(SkipEmptyMutableWorkStep.java:90)
+	at org.gradle.internal.execution.steps.SkipEmptyMutableWorkStep.executeMutable(SkipEmptyMutableWorkStep.java:53)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.executeMutable(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.executeMutable(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.executeMutable(HandleStaleOutputsStep.java:77)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.executeMutable(HandleStaleOutputsStep.java:43)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$executeMutable$0(AssignMutableWorkspaceStep.java:34)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:305)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.executeMutable(AssignMutableWorkspaceStep.java:30)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.executeMutable(AssignMutableWorkspaceStep.java:21)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:56)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:38)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:68)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:132)
+	... 61 more
+
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.4.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 25s
+7 actionable tasks: 7 executed
