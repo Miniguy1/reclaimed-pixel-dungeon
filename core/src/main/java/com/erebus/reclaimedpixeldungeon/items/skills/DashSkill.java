@@ -5,6 +5,8 @@ import com.erebus.reclaimedpixeldungeon.actors.Actor;
 import com.erebus.reclaimedpixeldungeon.actors.Char;
 import com.erebus.reclaimedpixeldungeon.actors.buffs.Invisibility;
 import com.erebus.reclaimedpixeldungeon.actors.hero.Hero;
+import com.erebus.reclaimedpixeldungeon.actors.hero.WarriorSkills;
+import com.erebus.reclaimedpixeldungeon.actors.mobs.Mob;
 import com.erebus.reclaimedpixeldungeon.items.wands.WandOfBlastWave;
 import com.erebus.reclaimedpixeldungeon.mechanics.Ballistica;
 import com.erebus.reclaimedpixeldungeon.messages.Messages;
@@ -31,7 +33,7 @@ public class DashSkill extends WarriorSkill {
 
 	@Override
 	public int cooldownTurns() {
-		return COOLDOWN;
+		return Dungeon.hero == null ? COOLDOWN : WarriorSkills.dashCooldown( Dungeon.hero );
 	}
 
 	/** the blow's damage: not rolled against defense, and armor does not reduce it */
@@ -60,7 +62,7 @@ public class DashSkill extends WarriorSkill {
 			@Override
 			public void onSelect( Integer cell ) {
 				if (cell == null) return;
-				if (Dungeon.level.distance( hero.pos, cell ) > RANGE) {
+				if (Dungeon.level.distance( hero.pos, cell ) > WarriorSkills.dashRange( hero )) {
 					GLog.w( Messages.get( DashSkill.class, "too_far" ) );
 					return;
 				}
@@ -85,7 +87,13 @@ public class DashSkill extends WarriorSkill {
 							GameScene.updateFog();
 						}
 						startCooldown();
-						strike( hero, target );
+						int dealt = strike( hero, target );
+						if (WarriorSkills.dashShockwave( hero ) && dealt > 0) {
+							int half = Math.max( 1, Math.round( dealt * 0.5f ) );
+							for (Mob m : Dungeon.level.mobs.toArray( new Mob[0] )) {
+								if (m != target && m.alignment == Char.Alignment.ENEMY && m.isAlive() && Dungeon.level.adjacent( hero.pos, m.pos )) m.damage( half, hero );
+							}
+						}
 						WandOfBlastWave.BlastWave.blast( dest );
 						PixelScene.shake( 2, 0.5f );
 						Invisibility.dispel();

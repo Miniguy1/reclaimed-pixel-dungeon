@@ -2,6 +2,7 @@ package com.erebus.reclaimedpixeldungeon.items.skills;
 
 import com.erebus.reclaimedpixeldungeon.Dungeon;
 import com.erebus.reclaimedpixeldungeon.actors.hero.Hero;
+import com.erebus.reclaimedpixeldungeon.actors.hero.WarriorSkills;
 import com.erebus.reclaimedpixeldungeon.effects.Speck;
 import com.erebus.reclaimedpixeldungeon.messages.Messages;
 import com.erebus.reclaimedpixeldungeon.sprites.CharSprite;
@@ -27,7 +28,7 @@ public class LifetakerSkill extends WarriorSkill {
 
 	@Override
 	public int cooldownTurns() {
-		return COOLDOWN;
+		return Dungeon.hero == null ? COOLDOWN : WarriorSkills.lifetakerCooldown( Dungeon.hero );
 	}
 
 	@Override
@@ -50,7 +51,7 @@ public class LifetakerSkill extends WarriorSkill {
 
 	/** how much a kill heals this hero (their maximum health, a twentieth, at least 1) */
 	public static int healFor( Hero hero ) {
-		return Math.max( 1, Math.round( hero.HT * HEAL ) );
+		return Math.max( 1, Math.round( hero.HT * WarriorSkills.lifetakerHeal( hero ) ) );
 	}
 
 	/** an enemy has died by the hero's hand */

@@ -1073,4 +1073,15 @@ public class ItemSpriteSheet {
 	static {
 		assignItemRect( GOLDEN_SKELETON_KEY, 11, 16 );
 	}
+
+	public static final int SKILL_STONE_SKIN  = OW_SKILLS+3;
+	public static final int SKILL_LAST_STAND  = OW_SKILLS+4;
+	public static final int SKILL_RAMPAGE     = OW_SKILLS+5;
+	public static final int SKILL_BLOODTHIRST = OW_SKILLS+6;
+	static {
+		assignItemRect( SKILL_STONE_SKIN, 14, 15 );
+		assignItemRect( SKILL_LAST_STAND, 16, 16 );
+		assignItemRect( SKILL_RAMPAGE, 15, 15 );
+		assignItemRect( SKILL_BLOODTHIRST, 11, 15 );
+	}
 }

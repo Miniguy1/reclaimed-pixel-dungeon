@@ -251,6 +251,8 @@ public class Hero extends Char {
 	public int exp = 0;
 	
 	public int HTBoost = 0;
+	//the Warrior's skill levels (see WarriorSkills)
+	public int[] skillLevels = WarriorSkills.fresh();
 	
 	private ArrayList<Mob> visibleEnemies;
 
@@ -359,6 +361,7 @@ public class Hero extends Char {
 		bundle.put( EXPERIENCE, exp );
 		
 		bundle.put( HTBOOST, HTBoost );
+		bundle.put( "skilllevels", skillLevels );
 
 		belongings.storeInBundle( bundle );
 	}
@@ -370,6 +373,11 @@ public class Hero extends Char {
 		exp = bundle.getInt( EXPERIENCE );
 
 		HTBoost = bundle.getInt(HTBOOST);
+		int[] savedSkills = bundle.getIntArray( "skilllevels" );
+		skillLevels = WarriorSkills.fresh();
+		if (savedSkills != null && savedSkills.length > 0) {
+			for (int i = 0; i < Math.min( savedSkills.length, skillLevels.length ); i++) skillLevels[i] = savedSkills[i];
+		}
 
 		super.restoreFromBundle( bundle );
 
@@ -1706,6 +1714,7 @@ public class Hero extends Char {
 	@Override
 	public int attackProc( final Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
+		damage = WarriorSkills.onAttack( this, enemy, damage );   //Rampage and Bloodthirst
 
 		KindOfWeapon wep;
 		if (RingOfForce.fightingUnarmed(this) && !RingOfForce.unarmedGetsWeaponEnchantment(this)){
@@ -1833,6 +1842,7 @@ public class Hero extends Char {
 
 	@Override
 	public void damage( int dmg, Object src ) {
+		dmg = WarriorSkills.incoming( this, dmg );   //Stone Skin
 		if (buff(TimekeepersHourglass.timeStasis.class) != null
 				|| buff(TimeStasis.class) != null) {
 			clearIncomingHitContext();
@@ -1897,6 +1907,7 @@ public class Hero extends Char {
 		int preHP = HP + shielding();
 		if (src instanceof Hunger) preHP -= shielding();
 		super.damage( dmg, src );
+		WarriorSkills.afterDamage( this );   //Last Stand
 		int postHP = HP + shielding();
 		if (src instanceof Hunger) postHP -= shielding();
 		int effectiveDamage = preHP - postHP;
@@ -2576,6 +2587,7 @@ public class Hero extends Char {
 			lvl = 1;
 			exp = 0;
 			HTBoost = 0;
+			skillLevels = WarriorSkills.fresh();   //death takes the skills with the level
 			subClass = HeroSubClass.NONE;
 			armorAbility = null;
 			talents.clear();

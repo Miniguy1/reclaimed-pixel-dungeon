@@ -100,6 +100,17 @@ public class WndGame extends Window {
 			curBtn.icon(Icons.get(Icons.RANKINGS));
 		}
 
+		// my Warrior skill tree
+		if (Dungeon.hero != null && Dungeon.hero.heroClass == com.erebus.reclaimedpixeldungeon.actors.hero.HeroClass.WARRIOR) {
+			addButton( curBtn = new RedButton( "Skills" ) {
+				@Override
+				protected void onClick() {
+					hide();
+					GameScene.show( new WndWarriorSkills() );
+				}
+			});
+		}
+
 		// my own mod menu
 		addButton( curBtn = new RedButton( "Mod menu" ) {
 			@Override
