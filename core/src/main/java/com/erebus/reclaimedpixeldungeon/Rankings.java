@@ -349,7 +349,7 @@ public enum Rankings {
 		Notes.reset();
 		Dungeon.quickslot.reset();
 		QuickSlotButton.reset();
-		Toolbar.swappedQuickslots = false;
+		Toolbar.quickBank = 0;
 
 		if (data == null) return;
 

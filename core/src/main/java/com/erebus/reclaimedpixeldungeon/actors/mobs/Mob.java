@@ -152,6 +152,7 @@ public abstract class Mob extends Char {
 	protected boolean homebaseRaidCounterTracked = false;
 	private boolean reducedImageKillExp = false;
 	private boolean killedByTranscendantElite = false;
+	private boolean killedByHero = false;   //for my Lifetaker skill
 
 	protected static final float TIME_TO_WAKE_UP = 1f;
 	static final float MAX_EFFECTIVE_MOVEMENT_RATE = 10f;
@@ -1062,7 +1063,7 @@ public abstract class Mob extends Char {
 				if (Dungeon.hero.subClass == HeroSubClass.MONK){
 					Buff.affect(Dungeon.hero, MonkEnergy.class).gainEnergy(this);
 				}
-				if (cause == Dungeon.hero) {
+				if (killedByHero) {
 					com.erebus.reclaimedpixeldungeon.items.skills.LifetakerSkill.onKill( Dungeon.hero );   //my warrior skill
 				}
 			}
@@ -1090,6 +1091,7 @@ public abstract class Mob extends Char {
 		}
 
 		reducedImageKillExp = cause instanceof MirrorImage || cause instanceof PrismaticImage;
+		killedByHero = cause == Dungeon.hero;
 		Mob transcendantHunter = EliteMob.killHunter(this, cause);
 		if (cause instanceof Char && cause != Dungeon.hero
 				&& ((Char)cause).alignment == Alignment.ALLY) {
