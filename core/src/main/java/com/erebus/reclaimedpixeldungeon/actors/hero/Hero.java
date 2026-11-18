@@ -251,9 +251,6 @@ public class Hero extends Char {
 	public int exp = 0;
 	
 	public int HTBoost = 0;
-	//mana, for the skill buttons (the Warrior uses it)
-	public int MP = 0;
-	public int MT = 0;
 	
 	private ArrayList<Mob> visibleEnemies;
 
@@ -362,8 +359,6 @@ public class Hero extends Char {
 		bundle.put( EXPERIENCE, exp );
 		
 		bundle.put( HTBOOST, HTBoost );
-		bundle.put( "mana", MP );
-		bundle.put( "manamax", MT );
 
 		belongings.storeInBundle( bundle );
 	}
@@ -375,8 +370,6 @@ public class Hero extends Char {
 		exp = bundle.getInt( EXPERIENCE );
 
 		HTBoost = bundle.getInt(HTBOOST);
-		MP = bundle.getInt( "mana" );
-		MT = bundle.getInt( "manamax" );
 
 		super.restoreFromBundle( bundle );
 
@@ -534,7 +527,7 @@ public class Hero extends Char {
 		}
 		Buff.affect( this, Regeneration.class );
 		Buff.affect( this, Hunger.class );
-		Buff.affect( this, com.erebus.reclaimedpixeldungeon.actors.buffs.ManaFlow.class );
+		Buff.affect( this, com.erebus.reclaimedpixeldungeon.actors.buffs.SkillKit.class );
 	}
 	
 	public int tier() {

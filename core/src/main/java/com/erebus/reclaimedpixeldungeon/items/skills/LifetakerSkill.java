@@ -11,18 +11,23 @@ import com.erebus.reclaimedpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 
 /**
- * Lifetaker: a toggle. While it is on, every enemy the hero kills heals 5% of their maximum health, and costs 3 mana. With
- * too little mana, or at full health, nothing is spent.
+ * Lifetaker: a toggle. While it is on, an enemy the hero kills heals 5% of their maximum health. After a heal it recharges for
+ * 5 turns, and kills in that time do not heal (so a whole pack does not heal for each one). Nothing happens at full health.
  */
 public class LifetakerSkill extends WarriorSkill {
 
-	public static final int COST = 3;
+	public static final int COOLDOWN = 5;
 	public static final float HEAL = 0.05f;
 
 	public boolean active = false;
 
 	{
 		image = ItemSpriteSheet.SKILL_LIFETAKER;
+	}
+
+	@Override
+	public int cooldownTurns() {
+		return COOLDOWN;
 	}
 
 	@Override
@@ -36,9 +41,10 @@ public class LifetakerSkill extends WarriorSkill {
 		QuickSlotButton.refresh();
 	}
 
-	/** on while it is on, off while it is not */
+	/** the turns left while it recharges, otherwise on or off */
 	@Override
 	public String status() {
+		if (cooldown > 0) return Integer.toString( cooldown );
 		return active ? "on" : "off";
 	}
 
@@ -51,15 +57,14 @@ public class LifetakerSkill extends WarriorSkill {
 	public static void onKill( Hero hero ) {
 		if (hero == null || hero.belongings == null) return;
 		LifetakerSkill skill = hero.belongings.getItem( LifetakerSkill.class );
-		if (skill == null || !skill.active || hero.MP < COST || hero.HP >= hero.HT) return;
-		hero.MP -= COST;
+		if (skill == null || !skill.active || !skill.ready() || hero.HP >= hero.HT) return;
 		int heal = healFor( hero );
 		hero.HP = Math.min( hero.HT, hero.HP + heal );
 		if (hero.sprite != null) {
 			hero.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 			hero.sprite.showStatus( CharSprite.POSITIVE, Integer.toString( heal ) );
 		}
-		QuickSlotButton.refresh();
+		skill.startCooldown();
 	}
 
 	private static final String ACTIVE = "active";

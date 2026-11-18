@@ -12,22 +12,26 @@ import com.erebus.reclaimedpixeldungeon.scenes.CellSelector;
 import com.erebus.reclaimedpixeldungeon.scenes.GameScene;
 import com.erebus.reclaimedpixeldungeon.scenes.PixelScene;
 import com.erebus.reclaimedpixeldungeon.sprites.ItemSpriteSheet;
-import com.erebus.reclaimedpixeldungeon.ui.QuickSlotButton;
 import com.erebus.reclaimedpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 
 /**
  * Dash: rush the first enemy in a line (up to 6 tiles away) and strike it for 120% of the hero's weapon damage. The blow is
- * not rolled against its defense, so it cannot be dodged, and it ignores armor. Costs 10 mana.
+ * not rolled against its defense, so it cannot be dodged, and it ignores armor. It recharges for 20 turns.
  */
 public class DashSkill extends WarriorSkill {
 
-	public static final int COST = 10;
+	public static final int COOLDOWN = 20;
 	public static final int RANGE = 6;
 	public static final float POWER = 1.2f;
 
 	{
 		image = ItemSpriteSheet.SKILL_DASH;
+	}
+
+	@Override
+	public int cooldownTurns() {
+		return COOLDOWN;
 	}
 
 	/** the blow's damage: not rolled against defense, and armor does not reduce it */
@@ -44,8 +48,8 @@ public class DashSkill extends WarriorSkill {
 			super.execute( hero, action );
 			return;
 		}
-		if (hero.MP < COST) {
-			GLog.w( Messages.get( this, "no_mana", COST ) );
+		if (!ready()) {
+			GLog.w( Messages.get( this, "recharging", cooldown ) );
 			return;
 		}
 		if (hero.rooted) {
@@ -80,8 +84,7 @@ public class DashSkill extends WarriorSkill {
 							Dungeon.observe();
 							GameScene.updateFog();
 						}
-						hero.MP -= COST;
-						QuickSlotButton.refresh();
+						startCooldown();
 						strike( hero, target );
 						WandOfBlastWave.BlastWave.blast( dest );
 						PixelScene.shake( 2, 0.5f );
