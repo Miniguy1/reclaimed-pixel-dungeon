@@ -1371,10 +1371,10 @@ public class Hero extends Char {
 			Heap heap = Dungeon.level.heaps.get( dst );
 			if (heap != null && (heap.type != Type.HEAP && heap.type != Type.FOR_SALE)) {
 				
-				if ((heap.type == Type.LOCKED_CHEST && Notes.keyCount(new GoldenKey(Dungeon.depth)) < 1)
-					|| (heap.type == Type.CRYSTAL_CHEST && Notes.keyCount(new CrystalKey(Dungeon.depth)) < 1)
-					|| (heap.type == Type.ARCANE_RELIQUARY && Notes.keyCount(new ArcaneKey(Dungeon.depth)) < 1)
-					|| (heap.type == Type.PROVISION_CACHE && Notes.keyCount(new ProvisionKey(Dungeon.depth)) < 1)){
+				if ((heap.type == Type.LOCKED_CHEST && lacksKey( new GoldenKey( Dungeon.depth ) ))
+					|| (heap.type == Type.CRYSTAL_CHEST && lacksKey( new CrystalKey( Dungeon.depth ) ))
+					|| (heap.type == Type.ARCANE_RELIQUARY && lacksKey( new ArcaneKey( Dungeon.depth ) ))
+					|| (heap.type == Type.PROVISION_CACHE && lacksKey( new ProvisionKey( Dungeon.depth ) ))){
 
 						GLog.w( Messages.get(this, "locked_chest") );
 						ready();
@@ -1412,6 +1412,20 @@ public class Hero extends Char {
 		}
 	}
 	
+	//the Golden Skeleton Key opens any lock on any floor and is never used up; a floor's own key is spent only without it
+	private boolean hasKeyFor( Key key ) {
+		return com.erebus.reclaimedpixeldungeon.items.keys.GoldenSkeletonKey.carriedBy( this ) || Notes.keyCount( key ) > 0;
+	}
+
+	private boolean lacksKey( Key key ) {
+		return !hasKeyFor( key );
+	}
+
+	private boolean takeKey( Key key ) {
+		if (com.erebus.reclaimedpixeldungeon.items.keys.GoldenSkeletonKey.carriedBy( this )) return true;
+		return Notes.remove( key );
+	}
+
 	private boolean actUnlock( HeroAction.Unlock action ) {
 		int doorCell = action.dst;
 		if (Dungeon.level.adjacent( pos, doorCell )) {
@@ -1421,7 +1435,7 @@ public class Hero extends Char {
 			int door = Dungeon.level.map[doorCell];
 			
 			if (door == Terrain.LOCKED_DOOR
-					&& Notes.keyCount(new IronKey(Dungeon.depth)) > 0) {
+					&& hasKeyFor( new IronKey( Dungeon.depth ) )) {
 				
 				hasKey = true;
 
@@ -1437,12 +1451,12 @@ public class Hero extends Char {
 				}
 				
 			} else if (door == Terrain.CRYSTAL_DOOR
-					&& Notes.keyCount(new CrystalKey(Dungeon.depth)) > 0) {
+					&& hasKeyFor( new CrystalKey( Dungeon.depth ) )) {
 
 				hasKey = true;
 
 			} else if (door == Terrain.LOCKED_EXIT
-					&& Notes.keyCount(new WornKey(Dungeon.depth)) > 0) {
+					&& hasKeyFor( new WornKey( Dungeon.depth ) )) {
 
 				hasKey = true;
 				
@@ -2774,7 +2788,7 @@ public class Hero extends Char {
 				boolean hasKey = true;
 				boolean openedLock = false;
 				if (door == Terrain.LOCKED_DOOR) {
-					hasKey = Notes.remove(new IronKey(Dungeon.depth));
+					hasKey = takeKey( new IronKey( Dungeon.depth ) );
 					if (hasKey) {
 						if (keyUseTrack != null){
 							keyUseTrack.processIronLockOpened();
@@ -2788,7 +2802,7 @@ public class Hero extends Char {
 					GLog.i( Messages.get(SkeletonKey.class, "force_lock"));
 					openedLock = true;
 				} else if (door == Terrain.CRYSTAL_DOOR) {
-					hasKey = Notes.remove(new CrystalKey(Dungeon.depth));
+					hasKey = takeKey( new CrystalKey( Dungeon.depth ) );
 					if (hasKey) {
 						if (keyUseTrack != null){
 							keyUseTrack.processCrystalLockOpened();
@@ -2799,7 +2813,7 @@ public class Hero extends Char {
 						CellEmitter.get( doorCell ).start( Speck.factory( Speck.DISCOVER ), 0.025f, 20 );
 					}
 				} else {
-					hasKey = Notes.remove(new WornKey(Dungeon.depth));
+					hasKey = takeKey( new WornKey( Dungeon.depth ) );
 					if (hasKey) {
 						Level.set(doorCell, Terrain.UNLOCKED_EXIT);
 						openedLock = true;
@@ -2835,23 +2849,23 @@ public class Hero extends Char {
 				if (heap.type == Type.SKELETON || heap.type == Type.REMAINS) {
 					Sample.INSTANCE.play( Assets.Sounds.BONES );
 				} else if (heap.type == Type.LOCKED_CHEST){
-					hasKey = Notes.remove(new GoldenKey(Dungeon.depth));
+					hasKey = takeKey( new GoldenKey( Dungeon.depth ) );
 					if (hasKey && keyUseTrack != null){
 						keyUseTrack.processGoldLockOpened();
 					}
 					openedLock = hasKey;
 				} else if (heap.type == Type.CRYSTAL_CHEST){
-					hasKey = Notes.remove(new CrystalKey(Dungeon.depth));
+					hasKey = takeKey( new CrystalKey( Dungeon.depth ) );
 					if (hasKey && keyUseTrack != null){
 						keyUseTrack.processCrystalLockOpened();
 					}
 					openedLock = hasKey;
 				} else if (heap.type == Type.ARCANE_RELIQUARY){
-					hasKey = Notes.remove(new ArcaneKey(Dungeon.depth));
+					hasKey = takeKey( new ArcaneKey( Dungeon.depth ) );
 					if (hasKey && keyUseTrack != null) keyUseTrack.processArcaneLockOpened();
 					openedLock = hasKey;
 				} else if (heap.type == Type.PROVISION_CACHE){
-					hasKey = Notes.remove(new ProvisionKey(Dungeon.depth));
+					hasKey = takeKey( new ProvisionKey( Dungeon.depth ) );
 					if (hasKey && keyUseTrack != null) keyUseTrack.processProvisionLockOpened();
 					openedLock = hasKey;
 				}

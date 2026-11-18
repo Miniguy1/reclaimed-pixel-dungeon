@@ -77,7 +77,7 @@ public class WndModItemList extends Window {
 	}
 
 	/** a fresh copy of the item, identified, into the backpack (on the floor beneath the hero when the pack is full) */
-	private static void spawn( Class<?> cls ) {
+	static void spawn( Class<?> cls ) {
 		Object o = Reflection.newInstance( cls );
 		if (!(o instanceof Item) || Dungeon.hero == null) return;
 		Item item = (Item) o;

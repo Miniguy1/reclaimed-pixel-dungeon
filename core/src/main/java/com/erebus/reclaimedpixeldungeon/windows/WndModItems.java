@@ -23,6 +23,19 @@ public class WndModItems extends Window {
 		list.addTitle( "Spawn an item: consumables" );
 		for (Catalog c : Catalog.consumableCatalogs) addCategory( c );
 
+		list.addTitle( "Spawn an item: special" );
+		list.addItem( new ScrollingListPane.ListItem(
+				new ItemSprite( new com.erebus.reclaimedpixeldungeon.items.keys.GoldenSkeletonKey() ), null, "Golden Skeleton Key" ) {
+			@Override
+			public boolean onClick( float x, float y ) {
+				if (inside( x, y )) {
+					WndModItemList.spawn( com.erebus.reclaimedpixeldungeon.items.keys.GoldenSkeletonKey.class );
+					return true;
+				}
+				return false;
+			}
+		} );
+
 		resize( 120, Math.min( 144, (int) list.content().height() ) );
 		list.setRect( 0, 0, width, height );
 	}

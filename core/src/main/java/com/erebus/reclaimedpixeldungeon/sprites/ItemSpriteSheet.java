@@ -1068,4 +1068,9 @@ public class ItemSpriteSheet {
 		assignItemRect( SKILL_DASH, 16, 13 );
 		assignItemRect( SKILL_LIFETAKER, 13, 16 );
 	}
+
+	public static final int GOLDEN_SKELETON_KEY = OW_SKILLS+2;
+	static {
+		assignItemRect( GOLDEN_SKELETON_KEY, 11, 16 );
+	}
 }
